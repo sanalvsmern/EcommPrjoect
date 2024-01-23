@@ -1,0 +1,87 @@
+.style1{
+  border: 3px solid beige;
+  height: 650px;
+  margin-top: 10px;
+  border-radius: 20px;
+  box-shadow: 10px 10px 5px rgba(200, 209, 206, 0.5)
+}
+
+
+.style2{
+  border: 3px solid beige;
+  height: 380px;
+  margin-top: 10px;
+  margin-bottom: 300px;
+  border-radius: 20px;
+  box-shadow: 10px 10px 5px rgba(200, 209, 206, 0.5)
+}
+
+.styleLabel{
+  font-size: 15px;
+  color: rgb(18, 14, 85);
+}
+
+.Registerpage, .Signinpage{
+  background:url(https://i.postimg.cc/fLyNmW8h/41318643187.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+@media (max-width: 760px){
+  .Registerpage, .Signinpage {
+    background: none;
+  }
+}
+
+.dashboardDiv{
+  display: flex;
+  justify-content: center;
+}
+
+.headerClass {
+  display: flex;
+  flex-direction: row;
+  font-size: 50px;
+  justify-content: left;
+  align-items: center;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: rgb(64, 185, 165);
+}
+
+.footerContainer{
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+gap: 100px;
+}
+
+.aboutUs:hover , .contactUs:hover{
+font-weight: bold;
+}
+
+.pageButton {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  padding-top: 20px;
+}
+
+.SigninButton{
+  display: flex;
+  justify-content: center;
+}
+
+.viewProductClass{
+  display: flex;
+  justify-content: center;
+}
+
+.showButtonGroup{
+  color: red;
+}
+
+.hideButtonGroup{
+  display: none;
+}
