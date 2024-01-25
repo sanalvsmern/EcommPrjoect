@@ -7,6 +7,7 @@ import ViewProduct from './ViewProduct';
 import EditAddedItem from './Seller/EditAddedItem';
 import AddNewProduct from './Seller/AddNewProduct';
 import CheckoutPage from './User/CheckoutPage';
+import PaymentPage from './User/PaymentPage'
 
 
 function App() {
@@ -21,7 +22,8 @@ function App() {
           <Route path='/Seller/AddNewProduct' element={<AddNewProduct />}></Route>
           <Route path='/Seller/EditAddedItem' element={<EditAddedItem />}></Route>
           <Route path='/Homepage/ViewProduct' element={<ViewProduct />}></Route>
-          <Route path='/User/CheckoutPage' element={<CheckoutPage />}></Route>          
+          <Route path='/User/CheckoutPage' element={<CheckoutPage />}></Route>
+          <Route path='/User/PaymentPage' element={<PaymentPage />}></Route>           
         </Routes>
       </BrowserRouter>
     </div>

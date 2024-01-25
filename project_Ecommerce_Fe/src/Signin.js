@@ -65,10 +65,48 @@ function Signin() {
 
     const [showPassword, setShowPassword] = useState(false)
 
+    const handleSignin = async (e) => {
+
+        e.preventDefault();
+
+        try{
+        const response = await axios.post('http://localhost:5000/api/user/signin', {
+            email, password
+        });
+
+       if(response.data){
+            if(response.data.userType === 'user'){
+                const token = response.data.token;
+                sessionStorage.setItem('token', token);
+                navigate('/User/CheckoutPage');
+            }
+            if(response.data.userType === 'seller'){
+                const token = response.data.token;
+                sessionStorage.setItem('token', token);
+                navigate('/Seller/AddedItems');
+            }
+        }
+
+    } catch (error){
+        if(error.response){
+            const {status, data} = error.response;
+            if(status === 400){
+                alert(data.message)
+            }
+            if(status === 401){
+                alert(data.message)
+            }
+            if(status === 500){
+                alert(data.message)
+            }
+        }
+    }
+}
+
     return (
         <div>
-            <Header buttonToggle={false}/>
-            <Form>
+            <Header buttonToggle={false} />
+            <Form onSubmit={handleSignin}>
                 <Container>
                     <Row className="justify-content-end" >
                         <Col xs={12} md={12} lg={12}>
@@ -100,7 +138,7 @@ function Signin() {
                             </legend>
                             <InputGroup className="mb-2">
                                 <Form.Control
-                                    onChange={(e)=>setEmail(e.target.value)}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     placeholder="Enter your email address"
                                     name='Email'
                                 />
@@ -111,7 +149,7 @@ function Signin() {
                             <InputGroup className="mb-2">
                                 <Form.Control
                                     type={showPassword ? 'text' : 'password'}
-                                    onChange={(e)=>setPassword(e.target.value)}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     placeholder="Enter the password"
                                     name='Password'
                                 />
@@ -122,7 +160,7 @@ function Signin() {
                                 checked={showPassword}
                                 onChange={(e) => setShowPassword(e.currentTarget.checked)}
                             />
-                            <Button variant="outline-secondary mt-3" style={{ marginLeft: '140px' }}>Sign in</Button>
+                            <Button type='submit' variant="outline-secondary mt-3" style={{ marginLeft: '140px' }}>Sign in</Button>
                             {profile ? null : (
                                 <Button variant="outline-secondary mt-3" style={{ marginLeft: '95px' }} onClick={login}>
                                     Sign in with google

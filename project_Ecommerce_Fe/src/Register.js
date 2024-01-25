@@ -28,6 +28,13 @@ function Register() {
         navigate('/Homepage/Signin')
     }
 
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [dob, setDob] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [userType, setUserType] = useState("user");
+
     useEffect(() => {
         // Initialize datepicker
         $('#dob').datepicker({
@@ -35,49 +42,76 @@ function Register() {
             changeYear: true,
             yearRange: '1900:2023',
             dateFormat: 'yy-mm-dd',
-
         });
     }, []);
 
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [dob, setDob] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [userType, setUserType] = useState("");
-
-    const validateEmail = ()=>{
-        return email.includes('@');
-    }
-    
-    const validateFirstName = ()=>{
-        
+    const handleUser = (event) => {
+        setUserType(event.target.value)
     }
 
-    const validateFields = ()=>{
-        validateEmail()
+    const handleDob = (event) => {
+        setDob(event.target.value)
     }
 
-    const handleRegister = async (e)=>{
+    const validateName = (i) => {
+        const regex = /^[a-zA-Z]+$/;
+        if (i === null || i === undefined || !regex.test(i)) {
+            alert('Enter valid name')
+            return false;
+        } return true;
+    }
+
+    const validateEmail = (i) => {
+        if (!i.includes('@')) {
+            alert('Invalid Email');
+            return false;
+        } return true;
+
+    }
+
+    const validatePassword = (i) => {
+        const regex = /.{8,}/;
+        if (!regex.test(i)) {
+            alert('Password should atleast contain 8 characters');
+            return false
+        } return true;
+
+    }
+
+    const validateFields = () => {
+        return (
+            validateName(firstName) &&
+            validateName(lastName) &&
+            validateEmail(email) &&
+            validatePassword(password)
+        )
+    }
+
+    const handleRegister = async (e) => {
         e.preventDefault();
 
-     
+        if (!validateFields()) {
+            return false;
+        }
 
-        try{
+        try {
             const response = await axios.post('http://localhost:5000/api/user/register', {
                 firstName, lastName, dob, email, password, userType
             });
-            if (response.status == 200){
-                alert('Registration Successful');//if registration is successful
-            } else if (response.status === 400){
-                alert('This email id is already in use, try another email')
-            } else{
-                alert('Registration failed, try again');
-            }           
-            
-        } catch (error){
-            console.error('Registration failed', error);
-            alert('Server error, registration failed');
+
+            if (response.status === 200) {
+                alert(response.data.message);
+                navigate('/Homepage/Signin');
+            }
+        } catch (error) {
+            const { status, data } = error.response;
+
+            if (status === 400) {
+                alert(data.message)
+            }
+            if (status === 500) {
+                alert(data.message)
+            }
         }
     }
 
@@ -124,7 +158,7 @@ function Register() {
                             </legend>
                             <InputGroup className="mb-2">
                                 <Form.Control
-                                    onSelect={(e) => setDob(e.target.value)}
+                                    onSelect={handleDob}
                                     placeholder="Enter your Date of birth"
                                     id='dob' />
                             </InputGroup>
@@ -146,15 +180,17 @@ function Register() {
                                     placeholder="Enter the preferred password"
                                 />
                             </InputGroup>
-                            <legend>
-                                <label className='styleLabel'>User type: seller or user</label>
-                            </legend>
-                            <InputGroup className="mb-2">
-                                <Form.Control
-                                    onChange={(e) => setUserType(e.target.value)}
-                                    placeholder= "Enter the user type"
-                                />
-                            </InputGroup>
+                            <label className='styleLabel'>User type:&nbsp;&nbsp;</label>
+                            <label>User</label>
+                            <input type='radio'
+                                value='user'
+                                checked={userType === 'user'}
+                                onChange={handleUser}/>&nbsp;&nbsp;
+                            <label>Seller</label>
+                            <input type='radio'
+                                value='seller'
+                                checked={userType === 'seller'}
+                                onChange={handleUser} />
                             <Row>
                                 <Col xs={12} md={6} lg={6}>
                                     <Button type='submit' variant="outline-secondary mt-2">Register</Button>
