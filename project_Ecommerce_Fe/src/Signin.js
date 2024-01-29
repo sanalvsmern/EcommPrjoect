@@ -12,6 +12,7 @@ import axios from 'axios';
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import Header from './Header'
 import Footer from './Footer'
+import { toast } from 'react-toastify';
 
 
 function Signin() {
@@ -91,13 +92,13 @@ function Signin() {
         if(error.response){
             const {status, data} = error.response;
             if(status === 400){
-                alert(data.message)
+                toast.error(data.message)
             }
             if(status === 401){
-                alert(data.message)
+                toast.error(data.message)
             }
             if(status === 500){
-                alert(data.message)
+                toast.error(data.message)
             }
         }
     }

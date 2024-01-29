@@ -8,12 +8,15 @@ import EditAddedItem from './Seller/EditAddedItem';
 import AddNewProduct from './Seller/AddNewProduct';
 import CheckoutPage from './User/CheckoutPage';
 import PaymentPage from './User/PaymentPage'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
   return (
     <div>
       <BrowserRouter>
+        <ToastContainer />
         <Routes>
           <Route path='/Homepage' element={<Homepage />}></Route>
           <Route path='/Homepage/Signin' element={<Signin />}></Route>
@@ -23,7 +26,7 @@ function App() {
           <Route path='/Seller/EditAddedItem' element={<EditAddedItem />}></Route>
           <Route path='/Homepage/ViewProduct' element={<ViewProduct />}></Route>
           <Route path='/User/CheckoutPage' element={<CheckoutPage />}></Route>
-          <Route path='/User/PaymentPage' element={<PaymentPage />}></Route>           
+          <Route path='/User/PaymentPage' element={<PaymentPage />}></Route>
         </Routes>
       </BrowserRouter>
     </div>

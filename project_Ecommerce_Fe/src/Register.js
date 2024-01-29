@@ -14,6 +14,7 @@ import $ from 'jquery';
 import 'jquery-ui/ui/widgets/datepicker'; // Import datepicker module
 import 'jquery-ui/themes/base/all.css';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 
 function Register() {
@@ -56,14 +57,14 @@ function Register() {
     const validateName = (i) => {
         const regex = /^[a-zA-Z]+$/;
         if (i === null || i === undefined || !regex.test(i)) {
-            alert('Enter valid name')
+            toast.error('Enter valid name')
             return false;
         } return true;
     }
 
     const validateEmail = (i) => {
         if (!i.includes('@')) {
-            alert('Invalid Email');
+            toast.error('Invalid Email');
             return false;
         } return true;
 
@@ -72,7 +73,7 @@ function Register() {
     const validatePassword = (i) => {
         const regex = /.{8,}/;
         if (!regex.test(i)) {
-            alert('Password should atleast contain 8 characters');
+            toast.error('Password should atleast contain 8 characters');
             return false
         } return true;
 
@@ -100,17 +101,17 @@ function Register() {
             });
 
             if (response.status === 200) {
-                alert(response.data.message);
+                toast.success(response.data.message);
                 navigate('/Homepage/Signin');
             }
         } catch (error) {
             const { status, data } = error.response;
 
             if (status === 400) {
-                alert(data.message)
+                toast.error(data.message)
             }
             if (status === 500) {
-                alert(data.message)
+                toast.error(data.message)
             }
         }
     }

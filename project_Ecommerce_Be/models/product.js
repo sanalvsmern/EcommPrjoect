@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
 
 const Product = mongoose.model('Product', {
-    id : String, 
+    sellerId : String,
+    productId : String, 
     productName : String,
     categoryId : String,
     description : String,
