@@ -17,8 +17,8 @@ function ViewProduct() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const productView = await axios.get(`https://jsonplaceholder.typicode.com/photos`);
-        const productData = productView.data;
+        const product = await axios.get(`http://localhost:5000/api/admin/productsRoutes$`);
+        const productData = product.data;
 
         setProducts(productData)
       }

@@ -6,7 +6,8 @@ const cors = require('cors');
 const userRegistrationRoutes = require('./routes/userRegistrationRoutes');
 const userSigninRoutes = require('./routes/userSigninRoutes');
 // const userLogoutRoutes = require('./routes/userSignoutRoutes');
-// const productsRoutes = require('./routes/productsRoutes');
+const productsRoutes = require('./routes/productsRoutes');
+const productsRoutes = require('./routes/viewProduct');
 // const cartRouter = require('./routes/cartRouter');
 // const userDetails = require('./routes/userDetails');
 
@@ -25,7 +26,8 @@ mongoose.connect('mongodb://0.0.0.0:27017/ecommercePlatform', { useNewUrlParser:
 app.use('/api/user', userRegistrationRoutes);
 app.use('/api/user', userSigninRoutes);
 // app.use('/api/user', userSignoutRoutes);
-// app.use('/api/admin', productsRoutes);
+app.use('/api/admin', productsRoutes);
+app.use('/api/admin', viewProduct);
 // app.use('/api/admin', cartRouter);
 // app.use('/api/user', userDetails);
 

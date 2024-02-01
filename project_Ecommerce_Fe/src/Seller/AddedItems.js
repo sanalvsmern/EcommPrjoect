@@ -1,59 +1,101 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Table } from 'react-bootstrap'
 import Header from '../Header'
 import Footer from '../Footer'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { jwtDecode } from 'jwt-decode';
+import { toast } from 'react-toastify';
+
 
 function AddedItems() {
 
-  const token = sessionStorage.getItem('token')
   const navigate = useNavigate();
+  const token = sessionStorage.getItem('token')
+  const [productList, setProductList] = useState([]);
+
+  const [sellerId, setSellerId] = useState('');
 
   useEffect(() => {
-    if (!token) {
-      navigate('/Homepage');
-    } else {
-      return (
-        <div>
-          <Header buttonToggle={true} />
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>Product Id</th>
-                <th>Product Name</th>
-                <th>Category Id</th>
-                <th>Price</th>
-                <th>Rating</th>
-                <th>Review</th>
-                <th>Vendor Name</th>
-                <th>Warrenty</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td style={{ display: 'flex', justifyContent: 'center' }}>
-                  <Button variant="warning" style={{ margin: '2px' }}>Edit</Button>
-                  <Button variant="primary" style={{ margin: '2px' }}>View</Button>
-                  <Button variant="danger" style={{ margin: '2px' }}>delete</Button>
-                </td>
-              </tr>
-            </tbody>
-          </Table>
-          <Footer />
-        </div>
-      )
-    }
-  }, [token, navigate])
 
+    const fetchProduct = async () => {
+
+      if (!token) {
+        navigate('/Homepage/Signin')
+      } else {
+
+        try {
+          const decodedToken = jwtDecode(token);
+          setSellerId(decodedToken.userId);
+
+          const response = await axios.get(`http://localhost:5000/api/admin/productsRoutes/${decodedToken.userId}`);
+          setProductList(response.data);
+          console.log(productList);
+
+        } catch (error) {
+          const { status, data } = error.response;
+          if (status === 500) {
+            toast.error(data.message);
+          }
+        }
+      }
+    }
+    fetchProduct()
+  }, [token])
+
+  const handleAdd = ()=>{
+    navigate('/Seller/AddNewProduct')
+  }
+
+  return (
+    <div>
+      <Header buttonToggle={true} />
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Product Id</th>
+            <th>Product Name</th>
+            <th>Category Id</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Is Available</th>
+            <th>Product Image</th>
+            <th>Rating</th>
+            <th>Review</th>
+            <th>Vendor Name</th>
+            <th>Warranty</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {productList.map((product) => (
+            <tr key={product.productId}>
+              <td>{product.productId}</td>
+              <td>{product.productName}</td>
+              <td>{product.categoryId}</td>
+              <td>{product.description}</td>
+              <td>{product.price}</td>
+              <td>{product.isAvailable?<p>Yes</p>:<p>No</p>}</td>
+              <td>{product.productImage}</td>
+              <td>{product.rating}</td>
+              <td>{product.review}</td>
+              <td>{product.vendorName}</td>
+              <td>{product.warranty}</td>
+              <td style={{ display: 'flex', justifyContent: 'center' }}>
+                <Button variant="warning" style={{ margin: '2px' }}>Edit</Button>
+                <Button variant="primary" style={{ margin: '2px' }}>View</Button>
+                <Button variant="danger" style={{ margin: '2px' }}>delete</Button>
+              </td>
+            </tr>
+          )
+          )}
+
+        </tbody>
+      </Table>
+      <Button onClick={handleAdd} variant="outline-secondary mt-2">Add new product</Button>
+      <Footer />
+    </div>
+  )
 }
 
 export default AddedItems
