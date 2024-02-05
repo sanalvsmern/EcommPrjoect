@@ -1,32 +1,53 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Button, Card, Col, ListGroup, Row, Spinner } from 'react-bootstrap';
+import { toast } from 'react-toastify';
+// import PropTypes from 'prop-types';
 
-function Dashboard() {
-    const [photos, setPhotos] = useState([]);
+// Dashboard.propTypes = {
+//     category: PropTypes.string.isRequired,
+// };
+
+// Dashboard.defaultProps = {
+//     category: 'defaultCategory',
+// };
+
+function Dashboard(props) {
+
     const [loading, setLoading] = useState(true);
     const [conPerPage, setConPerPage] = useState(0);
+    const [products, setProducts] = useState('')
+    
 
     useEffect(() => {
-        const fetchPhotos = async () => {
-            try {
-                const response = await axios.get(`https://jsonplaceholder.typicode.com/photos`);
-                const newData = response.data.slice(conPerPage, conPerPage + 12);
 
+        if(props.category === 'all'){
+            const fetchProduct = async () => {
 
-                setPhotos(newData);
-                setLoading(false);
-
-            } catch (error) {
-                console.error('Error fetching photos:', error);
-                setLoading(false);
+                try {
+                    const response = await axios.get(`http://localhost:5000/api/admin/allProducts`);
+                    const newResponse = response.data.slice(conPerPage, conPerPage + 12)
+                    setProducts(newResponse)
+                    console.log(newResponse);
+                    setLoading(false)
+                    console.log(props.category);
+                } catch (error) {
+                    const { status, data } = error.response;
+                    if (status === 404) {
+                        toast.error(data.message);
+                    } else if (status === 500) {
+                        toast.error(data.message)
+                    }
+                }
             }
-        };
+            fetchProduct()
+        } else {
+            console.log('code pending');
+        }
+        
+    },[props.category])
 
-        fetchPhotos();
-    }, [conPerPage]);
-
-    const handleClick4 = () => {
+const handleClick4 = () => {
         setConPerPage(prev => Math.max(prev + 12, 0))
     }
 
@@ -41,26 +62,18 @@ function Dashboard() {
                     <span className="visually-hidden">Loading...</span>
                 </Spinner>) :
                     (<Row>
-                        {photos.map((photo) => (
-                            <Col xs={12} md={4} lg={3} key={photo.id}>
+                        {products.map((product) => (
+                            <Col xs={12} md={4} lg={3} key={product._id}>
                                 <Card style={{ width: '18rem' }}>
-                                    <Card.Img variant="top" src={photo.thumbnailUrl} />
+                                    <Card.Img variant="top" src={product.productImage} />
                                     <Card.Body>
-                                        <Card.Title>{photo.title}</Card.Title>
+                                        <Card.Title>{product.productName}</Card.Title>
                                         <Card.Text>
-                                            Category: {photo.albumId}
-                                        </Card.Text>
-                                    </Card.Body>
-                                    <ListGroup className="list-group-flush">
-                                        <ListGroup.Item>Category: {photo.albumId}</ListGroup.Item>
-                                        <ListGroup.Item>Vendor Name: {photo.albumId}</ListGroup.Item>
-                                        <ListGroup.Item>Rating: {photo.albumId}</ListGroup.Item>
-                                    </ListGroup>
-                                    <Card.Body style={{display:'flex',justifyContent:'center'}}>
-                                        <Card.Link href="#">
+                                            Price: {product.price}</Card.Text>
+                                            <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
                                             <Button variant="warning">View Product</Button>
                                             <Button variant="secondary">Add to cart</Button>
-                                        </Card.Link>
+                                            </div>
                                     </Card.Body>
                                 </Card>
                             </Col>

@@ -38,4 +38,30 @@ router.get('/productsRoutes/:id', async (req, res) => {
     }
 })
 
+router.get('/viewProduct/:id', async (req, res) => {
+    const productId = req.params.id;
+
+    try {
+        const data = await Product.findOne({ productId });
+        return res.status(200).json(data)
+    } catch (error) {
+        console.error('Error in fetching the product', error);
+        res.status(500).json({ message: 'Error fetching product', error: error.message })
+    }
+})
+
+router.get('/allProducts', async (req, res)=>{
+    try {
+        const products = await Product.find({});
+        if(!products){
+            return res.status(404).json({ message: 'No products found' })
+        } else{
+            return res.status(200).json(products)
+        }
+    } catch(error){
+        console.error('Error in fetching all the products', error);
+        res.status(500).json({message:'Error fetching all the products', error: error.message})
+    }
+})
+
 module.exports = router;

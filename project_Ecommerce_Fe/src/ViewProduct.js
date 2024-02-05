@@ -13,52 +13,59 @@ function ViewProduct() {
     navigate('/Homepage')
   }
 
-  const [products, setProducts] = useState([])
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const product = await axios.get(`http://localhost:5000/api/admin/productsRoutes$`);
-        const productData = product.data;
+  // const [products, setProducts] = useState([])
+  // useEffect(() => {
+  //   const fetchProduct = async () => {
+  //     try {
+  //       const product = await axios.get(`http://localhost:5000/api/admin/productsRoutes$`);
+  //       const productData = product.data;
 
-        setProducts(productData)
-      }
-      catch (error) {
-        console.log('Error fetching data', error);
+  //       setProducts(productData)
+  //     }
+  //     catch (error) {
+  //       console.log('Error fetching data', error);
 
-      }
-    }
-    fetchProduct();
-  }, [])
+  //     }
+  //   }
+  //   fetchProduct();
+  // }, [])
+
+  const product = {
+    sellerId: "65b7755eacf7ec42c0617cb8",
+    productId: "casio",
+    productName: "casio watch",
+    categoryId: "watch",
+    description: "normal casio watch",
+    price: 300,
+    isAvailable: true,
+    productImage: "https://i.postimg.cc/L6TSbqNs/casio-Watch.jpg",
+    rating: "3",
+    review: "Nice",
+    vendorName: "casio manufacturer",
+    warranty: "2 years"
+  };
 
   return (
     <div>
       <Header buttonToggle={true}/>
       <Container className='viewProductClass'>
-        {products.length > 0 ? (
+        {product ? (
           <Card style={{ width: '18rem' }}>
-            <Card.Img variant="top" src={products[0].url} />
-            <Card.Body>
-              <Card.Title>{products[0].title}</Card.Title>
-              <Card.Text>
-                Description about the product
-              </Card.Text>
-            </Card.Body>
-            <ListGroup className="list-group-flush">
-              <ListGroup.Item>Category: {products[0].albumId}</ListGroup.Item>
-              <ListGroup.Item>Price: {products[0].albumId}</ListGroup.Item>
-            </ListGroup>
-            <Card.Body style={{ display: 'flex', justifyContent: 'center' }}>
-              <Card.Link href="#">
-                <Button variant="secondary">Add to cart</Button>
-              </Card.Link>
-              <Card.Link>
-                <Button variant="warning">Buy Now</Button>
-              </Card.Link>
-              <Card.Link>
-                <div onClick={handleClickHome}>🏠</div>
-              </Card.Link>
-            </Card.Body>
-          </Card>
+          <Card.Img variant="top" src={product.productImage} />
+          <Card.Body>
+            <Card.Title>{product.productName}</Card.Title>
+            <Card.Text> {product.description}</Card.Text>
+            <Card.Text> Price: {product.price}</Card.Text>
+            <Card.Text> Rating: {product.rating}</Card.Text>
+            <Card.Text> Review: {product.review}</Card.Text>
+            <Card.Text> Vendor Name: {product.vendorName}</Card.Text>
+            <Card.Text> Warranty: {product.warranty}</Card.Text>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+            <Button variant="outline-secondary mt-2">Add To Cart</Button>
+            <Button variant="outline-secondary mt-2">Buy Now</Button>
+            </div>
+          </Card.Body>
+        </Card>
         ) : (<p>Loading...</p>)}
       </Container>
       <Footer />
