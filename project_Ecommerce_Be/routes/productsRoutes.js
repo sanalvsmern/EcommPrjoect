@@ -50,17 +50,63 @@ router.get('/viewProduct/:id', async (req, res) => {
     }
 })
 
-router.get('/allProducts', async (req, res)=>{
+router.get('/allProducts', async (req, res) => {
     try {
         const products = await Product.find({});
-        if(!products){
+        if (!products) {
             return res.status(404).json({ message: 'No products found' })
-        } else{
+        } else {
             return res.status(200).json(products)
         }
-    } catch(error){
+    } catch (error) {
         console.error('Error in fetching all the products', error);
-        res.status(500).json({message:'Error fetching all the products', error: error.message})
+        res.status(500).json({ message: 'Error fetching all the products', error: error.message })
+    }
+})
+
+router.get('/editProduct/:id', async (req, res) => {
+    const productId = req.params.id
+
+    try {
+        const product = await Product.findOne({ productId })
+        return res.status(200).json(product)
+    } catch (error) {
+        console.error('Error in fetching the data', error);
+        res.status(500).json({ message: 'Error fetching data', error: error.message })
+    }
+})
+
+router.put('/updateProduct/:id', async (req, res) => {
+    const productId = req.params.id
+    const { productName, categoryId, description, price, isAvailable,
+        productImage, rating, review, vendorName, warranty } = req.body
+
+    try {
+        const updatedProduct = await Product.findOneAndUpdate(
+            {productId:productId},
+            {
+                productName,
+                categoryId,
+                description,
+                price,
+                isAvailable,
+                productImage,
+                rating,
+                review,
+                vendorName,
+                warranty
+            },
+            { new: true }
+        );
+
+        if (!updatedProduct) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+        return res.status(200).json({ message: 'Product updated successfully' })
+
+    } catch (error) {
+        console.error('Error in updating the product:', error);
+        res.status(500).json({ message: 'Server errorrrrrr', error: error.message });
     }
 })
 

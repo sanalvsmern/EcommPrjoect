@@ -24,7 +24,7 @@ function App() {
           <Route path='Homepage/Register' element={<Register />}></Route>
           <Route path='/Seller/AddedItems' element={<AddedItems />}></Route>
           <Route path='/Seller/AddNewProduct' element={<AddNewProduct />}></Route>
-          <Route path='/Seller/EditAddedItem' element={<EditAddedItem />}></Route>
+          <Route path='/Seller/EditAddedItem/:productId' element={<EditAddedItem />}></Route>
           <Route path='/Homepage/ViewProduct' element={<ViewProduct />}></Route>
           <Route path='/User/CheckoutPage' element={<CheckoutPage />}></Route>
           <Route path='/User/PaymentPage' element={<PaymentPage />}></Route>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Button, Table } from 'react-bootstrap'
 import Header from '../Header'
 import Footer from '../Footer'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { jwtDecode } from 'jwt-decode';
 import { toast } from 'react-toastify';
@@ -30,7 +30,6 @@ function AddedItems() {
 
           const response = await axios.get(`http://localhost:5000/api/admin/productsRoutes/${decodedToken.userId}`);
           setProductList(response.data);
-          console.log(productList);
 
         } catch (error) {
           const { status, data } = error.response;
@@ -82,9 +81,11 @@ function AddedItems() {
               <td>{product.vendorName}</td>
               <td>{product.warranty}</td>
               <td style={{ display: 'flex', justifyContent: 'center' }}>
+                <Link to={`/Seller/EditAddedItem/${product.productId}`}>
                 <Button variant="warning" style={{ margin: '2px' }}>Edit</Button>
+                </Link>
                 <Button variant="primary" style={{ margin: '2px' }}>View</Button>
-                <Button variant="danger" style={{ margin: '2px' }}>delete</Button>
+                <Button onClick={()=>handleDelete(product.productId)} variant="danger" style={{ margin: '2px' }}>delete</Button>
               </td>
             </tr>
           )
