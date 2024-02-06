@@ -52,9 +52,17 @@ function EditAddedItem() {
 
         } catch (error) {
           const { status, data } = error.response;
-          if (status === 500) {
+
+
+          if (error.status === 404) {
+            
             toast.error(data.message);
+            navigate('/Seller/AddedItems')
+
+          } else if(error.status === 500){
+            toast.error(data.message)
           }
+
         }
       }
     }
@@ -138,9 +146,6 @@ function EditAddedItem() {
     }
   }
 
-  // const handleView = ()=>{
-  //   navigate('/Seller/AddedItems')
-  // }
 
   return (
     <div>

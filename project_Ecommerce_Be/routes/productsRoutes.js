@@ -69,6 +69,10 @@ router.get('/editProduct/:id', async (req, res) => {
 
     try {
         const product = await Product.findOne({ productId })
+
+        if(!product){
+            return res.status(404).json({message:'Product not found'})
+        }
         return res.status(200).json(product)
     } catch (error) {
         console.error('Error in fetching the data', error);
@@ -83,7 +87,7 @@ router.put('/updateProduct/:id', async (req, res) => {
 
     try {
         const updatedProduct = await Product.findOneAndUpdate(
-            {productId:productId},
+            {productId},
             {
                 productName,
                 categoryId,
@@ -106,7 +110,22 @@ router.put('/updateProduct/:id', async (req, res) => {
 
     } catch (error) {
         console.error('Error in updating the product:', error);
-        res.status(500).json({ message: 'Server errorrrrrr', error: error.message });
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+})
+
+router.delete('/deleteProduct/:id', async (req,res)=>{
+    const productId = req.params.id
+    try{
+        const deleteProduct = await Product.findOneAndDelete({productId})
+
+        if (!deleteProduct) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+        return res.status(200).json({ message: 'Product deleted successfully' })
+
+    } catch (error) {
+        res.status(500).json({message: 'Server error', error: error.message})
     }
 })
 

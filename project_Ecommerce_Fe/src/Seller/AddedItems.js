@@ -40,10 +40,30 @@ function AddedItems() {
       }
     }
     fetchProduct()
-  }, [token])
+  }, [token, navigate])
 
   const handleAdd = ()=>{
     navigate('/Seller/AddNewProduct')
+  }
+
+  const handleDelete = async (i)=>{
+    try{
+      const response = await axios.delete(`http://localhost:5000/api/admin/deleteProduct/${i}`)
+      if (response.status === 200) {
+        window.location.reload();
+        toast.success('Product deleted successfully')
+      }
+    } catch (error) {
+
+      const { status, data } = error.response;
+
+      if (status === 404) {
+        toast.error(data.message)
+      }
+      if (status === 500) {
+        toast.error(data.message)
+      }
+    }
   }
 
   return (
@@ -84,7 +104,9 @@ function AddedItems() {
                 <Link to={`/Seller/EditAddedItem/${product.productId}`}>
                 <Button variant="warning" style={{ margin: '2px' }}>Edit</Button>
                 </Link>
+                <Link to={`/ViewProduct/${product.productId}`}>
                 <Button variant="primary" style={{ margin: '2px' }}>View</Button>
+                </Link>
                 <Button onClick={()=>handleDelete(product.productId)} variant="danger" style={{ margin: '2px' }}>delete</Button>
               </td>
             </tr>
