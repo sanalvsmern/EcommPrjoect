@@ -1,49 +1,51 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Button, Card, CardLink, Container, ListGroup } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
 import Header from './Header'
 import Footer from './Footer'
+import { toast } from 'react-toastify'
 
 function ViewProduct() {
 
-  const navigate = useNavigate()
+  const { productId }= useParams();
+  const [product, setProduct] = useState('')
 
-  const handleClickHome = () => {
-    navigate('/Homepage')
-  }
+  useEffect (()=>{
+    const fetchProduct = async ()=>{
+      try{
+        const response = await axios.get(`http://localhost:5000/api/admin/viewProduct/${productId}`)
+        setProduct(response.data)
 
-  // const [products, setProducts] = useState([])
-  // useEffect(() => {
-  //   const fetchProduct = async () => {
-  //     try {
-  //       const product = await axios.get(`http://localhost:5000/api/admin/productsRoutes$`);
-  //       const productData = product.data;
+      } catch(error){
+        const { status, data } = error.response;
+        if(status === 404){
+          toast.error(data.message)
+          Navigate('/Homepage')
+        } else if(status === 500){
+          toast.error(data.message)
+        }
+      }
+    }
 
-  //       setProducts(productData)
-  //     }
-  //     catch (error) {
-  //       console.log('Error fetching data', error);
+    fetchProduct()
 
-  //     }
-  //   }
-  //   fetchProduct();
-  // }, [])
+  },[productId])
 
-  const product = {
-    sellerId: "65b7755eacf7ec42c0617cb8",
-    productId: "casio",
-    productName: "casio watch",
-    categoryId: "watch",
-    description: "normal casio watch",
-    price: 300,
-    isAvailable: true,
-    productImage: "https://i.postimg.cc/L6TSbqNs/casio-Watch.jpg",
-    rating: "3",
-    review: "Nice",
-    vendorName: "casio manufacturer",
-    warranty: "2 years"
-  };
+  // const product = {
+  //   sellerId: "65b7755eacf7ec42c0617cb8",
+  //   productId: "casio",
+  //   productName: "casio watch",
+  //   categoryId: "watch",
+  //   description: "normal casio watch",
+  //   price: 300,
+  //   isAvailable: true,
+  //   productImage: "https://i.postimg.cc/L6TSbqNs/casio-Watch.jpg",
+  //   rating: "3",
+  //   review: "Nice",
+  //   vendorName: "casio manufacturer",
+  //   warranty: "2 years"
+  // };
 
   return (
     <div>

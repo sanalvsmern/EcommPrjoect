@@ -21,7 +21,7 @@ router.post('/productsRoutes', async (req, res) => {
         }
 
     } catch (error) {
-        console.error('Error in adding the product:', error);
+        // console.error('Error in adding the product:', error);
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 })
@@ -33,7 +33,7 @@ router.get('/productsRoutes/:id', async (req, res) => {
         const data = await Product.find({ sellerId });
         return res.status(200).json(data)
     } catch (error) {
-        console.error('Error in fetching the data', error);
+        // console.error('Error in fetching the data', error);
         res.status(500).json({ message: 'Error fetching data', error: error.message })
     }
 })
@@ -45,7 +45,7 @@ router.get('/viewProduct/:id', async (req, res) => {
         const data = await Product.findOne({ productId });
         return res.status(200).json(data)
     } catch (error) {
-        console.error('Error in fetching the product', error);
+        // console.error('Error in fetching the product', error);
         res.status(500).json({ message: 'Error fetching product', error: error.message })
     }
 })
@@ -59,8 +59,23 @@ router.get('/allProducts', async (req, res) => {
             return res.status(200).json(products)
         }
     } catch (error) {
-        console.error('Error in fetching all the products', error);
+        // console.error('Error in fetching all the products', error);
         res.status(500).json({ message: 'Error fetching all the products', error: error.message })
+    }
+})
+
+router.get('/filteredProducts/:id', async (req, res)=>{
+
+    const categoryId = req.params.id;
+
+    try {
+        const products = await Product.find({categoryId})
+        if(products.length === 0){
+            return res.status(404).json( {message: 'No products found'} )
+        }
+        return res.status(200).json(products)
+    } catch(error) {
+        res.status(500).json({message:'Error fetching the filtered products', error: error.message})
     }
 })
 
@@ -75,7 +90,7 @@ router.get('/editProduct/:id', async (req, res) => {
         }
         return res.status(200).json(product)
     } catch (error) {
-        console.error('Error in fetching the data', error);
+        // console.error('Error in fetching the data', error);
         res.status(500).json({ message: 'Error fetching data', error: error.message })
     }
 })
@@ -109,7 +124,7 @@ router.put('/updateProduct/:id', async (req, res) => {
         return res.status(200).json({ message: 'Product updated successfully' })
 
     } catch (error) {
-        console.error('Error in updating the product:', error);
+        // console.error('Error in updating the product:', error);
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 })
@@ -125,6 +140,19 @@ router.delete('/deleteProduct/:id', async (req,res)=>{
         return res.status(200).json({ message: 'Product deleted successfully' })
 
     } catch (error) {
+        res.status(500).json({message: 'Server error', error: error.message})
+    }
+})
+
+router.get('/viewProduct/:id', async (req, res)=>{
+    const productId = req.params.id
+    try{
+        const fetchedProduct = await Product.findOne({productId})
+        if(!fetchedProduct){
+        return res.status(404).json({ message: 'Product not found' })
+        }
+        return res.status(200).json(fetchedProduct)
+    } catch(error){
         res.status(500).json({message: 'Server error', error: error.message})
     }
 })

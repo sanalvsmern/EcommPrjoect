@@ -25,7 +25,7 @@ function App() {
           <Route path='/Seller/AddedItems' element={<AddedItems />}></Route>
           <Route path='/Seller/AddNewProduct' element={<AddNewProduct />}></Route>
           <Route path='/Seller/EditAddedItem/:productId' element={<EditAddedItem />}></Route>
-          <Route path='/Homepage/ViewProduct' element={<ViewProduct />}></Route>
+          <Route path='ViewProduct/:productId' element={<ViewProduct />}></Route>
           <Route path='/User/CheckoutPage' element={<CheckoutPage />}></Route>
           <Route path='/User/PaymentPage' element={<PaymentPage />}></Route>
         </Routes>

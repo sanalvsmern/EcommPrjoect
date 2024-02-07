@@ -39,6 +39,7 @@ function EditAddedItem() {
           setSellerId(decodedToken.userId);
 
           const response = await axios.get(`http://localhost:5000/api/admin/editProduct/${productId}`);
+          
 
           setProductName(response.data.productName)
           setCategoryId(response.data.categoryId)
@@ -54,12 +55,12 @@ function EditAddedItem() {
           const { status, data } = error.response;
 
 
-          if (error.status === 404) {
-            
+          if (status === 404) {
+
             toast.error(data.message);
             navigate('/Seller/AddedItems')
 
-          } else if(error.status === 500){
+          } else if(status === 500){
             toast.error(data.message)
           }
 
@@ -288,7 +289,6 @@ function EditAddedItem() {
           </tbody>
         </Table>
         <Button type='submit' variant="outline-secondary mt-2">Update Product</Button>
-        {/* <Button type='submit' onClick={handleView} variant="outline-secondary mt-2">View Added Products</Button> */}
       </Form>
       <Footer />
     </div>
