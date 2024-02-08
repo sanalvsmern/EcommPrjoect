@@ -13,9 +13,16 @@ import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import Header from './Header'
 import Footer from './Footer'
 import { toast } from 'react-toastify';
+import { jwtDecode } from 'jwt-decode';
 
 
 function Signin() {
+
+    const token = sessionStorage.getItem('token')
+    const decodedToken = token ? jwtDecode(token) : null;
+    const navigate = useNavigate()
+
+
 
     //Google Authentication
     const [user, setUser] = useState([]);
@@ -36,9 +43,40 @@ function Signin() {
                         Authorization: `Bearer ${user.access_token}`,
                         Accept: 'application/json'
                     }
-                })
-                .then((res) => {
+                })  
+                .then(async(res) => {
                     setProfile(res.data);
+                    const firstName = res.data.given_name
+                    const lastName = res.data.family_name
+                    const email = res.data.email
+                    const googleId = res.data.id
+                    const userType = 'user'
+
+                    try {
+                        const response = await axios.post('http://localhost:5000/api/user/googleReg',
+                            {firstName, lastName, email, googleId, userType})
+                        if (response.status === 201) {
+                            toast.success(response.message)
+                            const token = response.data.token;
+                            sessionStorage.setItem('token', token);
+                            navigate('/User/CheckoutPage');
+                        } else if (response.status === 200) {
+                            toast.success(response.message)
+                            const token = response.data.token;
+                            sessionStorage.setItem('token', token);
+                            navigate('/User/CheckoutPage');
+                        }
+
+                    } catch (error) {
+                        if (error.response) {
+                            const { status, data } = error.response;
+                            if (status === 401) {
+                                toast.error(data.message)
+                            } else if (status === 500) {
+                                toast.error(data.message)
+                            }
+                        }
+                    }
                 })
                 .catch((err) => console.log(err));
         }
@@ -48,9 +86,9 @@ function Signin() {
         googleLogout();
         setProfile(null);
     };
+    
     // Google authentication till here
 
-    const navigate = useNavigate()
     const handleClick1 = () => {
         navigate('/Homepage')
     }
@@ -70,39 +108,39 @@ function Signin() {
 
         e.preventDefault();
 
-        try{
-        const response = await axios.post('http://localhost:5000/api/user/signin', {
-            email, password
-        });
+        try {
+            const response = await axios.post('http://localhost:5000/api/user/signin', {
+                email, password
+            });
 
-       if(response.data){
-            if(response.data.userType === 'user'){
-                const token = response.data.token;
-                sessionStorage.setItem('token', token);
-                navigate('/User/CheckoutPage');
+            if (response.data) {
+                if (response.data.userType === 'user') {
+                    const token = response.data.token;
+                    sessionStorage.setItem('token', token);
+                    navigate('/User/CheckoutPage');
+                }
+                if (response.data.userType === 'seller') {
+                    const token = response.data.token;
+                    sessionStorage.setItem('token', token);
+                    navigate('/Seller/AddedItems');
+                }
             }
-            if(response.data.userType === 'seller'){
-                const token = response.data.token;
-                sessionStorage.setItem('token', token);
-                navigate('/Seller/AddedItems');
-            }
-        }
 
-    } catch (error){
-        if(error.response){
-            const {status, data} = error.response;
-            if(status === 400){
-                toast.error(data.message)
-            }
-            if(status === 401){
-                toast.error(data.message)
-            }
-            if(status === 500){
-                toast.error(data.message)
+        } catch (error) {
+            if (error.response) {
+                const { status, data } = error.response;
+                if (status === 400) {
+                    toast.error(data.message)
+                }
+                if (status === 401) {
+                    toast.error(data.message)
+                }
+                if (status === 500) {
+                    toast.error(data.message)
+                }
             }
         }
     }
-}
 
     return (
         <div>
@@ -118,7 +156,7 @@ function Signin() {
                                         <Nav.Link onClick={handleClick2}>Register</Nav.Link>
                                         <Nav.Link onClick={handleClick3} style={{ fontWeight: 'bold' }}>Sign in</Nav.Link>
                                     </Nav>
-                                    <Nav className="ms-auto">
+                                    {/* <Nav className="ms-auto">
                                         {profile ? (
                                             <NavDropdown title="Signed in as:" id="basic-nav-dropdown">
                                                 <NavDropdown.Item onClick={logOut}>Sign Out</NavDropdown.Item>
@@ -126,12 +164,12 @@ function Signin() {
                                         <Nav.Link>
                                             {profile ? profile.name : 'Guest'}
                                         </Nav.Link>
-                                    </Nav>
+                                    </Nav> */}
                                 </Container>
                             </Navbar>
                         </Col>
-                        <Col md={6} lg={8} className='Signinpage'>
-                        </Col>
+                        {/* <Col md={6} lg={8} className='Signinpage'>
+                        </Col> */}
                         <Col xs={12} md={6} lg={4} className='style2'>
                             <h1 style={{ textAlign: 'center', fontSize: '30px', fontWeight: 'lighter', color: 'black' }}>Sign In</h1>
                             <legend>
@@ -162,7 +200,7 @@ function Signin() {
                                 onChange={(e) => setShowPassword(e.currentTarget.checked)}
                             />
                             <Button type='submit' variant="outline-secondary mt-3" style={{ marginLeft: '140px' }}>Sign in</Button>
-                            {profile ? null : (
+                            {token ? null : (
                                 <Button variant="outline-secondary mt-3" style={{ marginLeft: '95px' }} onClick={login}>
                                     Sign in with google
                                 </Button>
