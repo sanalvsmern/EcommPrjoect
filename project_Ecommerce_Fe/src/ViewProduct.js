@@ -1,15 +1,17 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Button, Card, CardLink, Container, ListGroup } from 'react-bootstrap'
-import { Navigate, useParams } from 'react-router-dom'
+import { Button, Card, Container } from 'react-bootstrap'
+import { useNavigate, useParams } from 'react-router-dom'
 import Header from './Header'
 import Footer from './Footer'
 import { toast } from 'react-toastify'
+import SubHeader from './SubHeader'
 
 function ViewProduct() {
 
   const { productId }= useParams();
   const [product, setProduct] = useState('')
+  const navigate = useNavigate()
 
   useEffect (()=>{
     const fetchProduct = async ()=>{
@@ -21,7 +23,7 @@ function ViewProduct() {
         const { status, data } = error.response;
         if(status === 404){
           toast.error(data.message)
-          Navigate('/Homepage')
+          navigate('/Homepage')
         } else if(status === 500){
           toast.error(data.message)
         }
@@ -32,9 +34,16 @@ function ViewProduct() {
 
   },[productId])
 
+  const handleAddToCart = ()=>{
+    // Save data to sessionStorage
+    sessionStorage.setItem('addedToCart', productId);
+    navigate('/User/CheckoutPage')
+  }
+
   return (
     <div>
       <Header/>
+      <SubHeader></SubHeader>
       <Container className='viewProductClass'>
         {product ? (
           <Card style={{ width: '18rem' }}>
@@ -48,7 +57,7 @@ function ViewProduct() {
             <Card.Text> Vendor Name: {product.vendorName}</Card.Text>
             <Card.Text> Warranty: {product.warranty}</Card.Text>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
-            <Button variant="outline-secondary mt-2">Add To Cart</Button>
+            <Button variant="outline-secondary mt-2" onClick={handleAddToCart}>Add To Cart</Button>
             <Button variant="outline-secondary mt-2">Buy Now</Button>
             </div>
           </Card.Body>
