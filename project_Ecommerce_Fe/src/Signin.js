@@ -13,13 +13,13 @@ import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import Header from './Header'
 import Footer from './Footer'
 import { toast } from 'react-toastify';
-import { jwtDecode } from 'jwt-decode';
+import SubHeader from './SubHeader';
+
 
 
 function Signin() {
 
     const token = sessionStorage.getItem('token')
-    const decodedToken = token ? jwtDecode(token) : null;
     const navigate = useNavigate()
 
 
@@ -43,8 +43,8 @@ function Signin() {
                         Authorization: `Bearer ${user.access_token}`,
                         Accept: 'application/json'
                     }
-                })  
-                .then(async(res) => {
+                })
+                .then(async (res) => {
                     setProfile(res.data);
                     const firstName = res.data.given_name
                     const lastName = res.data.family_name
@@ -54,7 +54,7 @@ function Signin() {
 
                     try {
                         const response = await axios.post('http://localhost:5000/api/user/googleReg',
-                            {firstName, lastName, email, googleId, userType})
+                            { firstName, lastName, email, googleId, userType })
                         if (response.status === 201) {
                             toast.success(response.message)
                             const token = response.data.token;
@@ -86,7 +86,7 @@ function Signin() {
         googleLogout();
         setProfile(null);
     };
-    
+
     // Google authentication till here
 
     const handleClick1 = () => {
@@ -144,32 +144,13 @@ function Signin() {
 
     return (
         <div>
-            <Header buttonToggle={false} />
+            <Header/>
+            <SubHeader></SubHeader>
             <Form onSubmit={handleSignin}>
                 <Container>
                     <Row className="justify-content-end" >
-                        <Col xs={12} md={12} lg={12}>
-                            <Navbar>
-                                <Container>
-                                    <Nav className="me-auto">
-                                        <Nav.Link onClick={handleClick1}>Home</Nav.Link>
-                                        <Nav.Link onClick={handleClick2}>Register</Nav.Link>
-                                        <Nav.Link onClick={handleClick3} style={{ fontWeight: 'bold' }}>Sign in</Nav.Link>
-                                    </Nav>
-                                    {/* <Nav className="ms-auto">
-                                        {profile ? (
-                                            <NavDropdown title="Signed in as:" id="basic-nav-dropdown">
-                                                <NavDropdown.Item onClick={logOut}>Sign Out</NavDropdown.Item>
-                                            </NavDropdown>) : null}
-                                        <Nav.Link>
-                                            {profile ? profile.name : 'Guest'}
-                                        </Nav.Link>
-                                    </Nav> */}
-                                </Container>
-                            </Navbar>
+                        <Col md={6} lg={8} className='Signinpage'>
                         </Col>
-                        {/* <Col md={6} lg={8} className='Signinpage'>
-                        </Col> */}
                         <Col xs={12} md={6} lg={4} className='style2'>
                             <h1 style={{ textAlign: 'center', fontSize: '30px', fontWeight: 'lighter', color: 'black' }}>Sign In</h1>
                             <legend>
@@ -199,12 +180,16 @@ function Signin() {
                                 checked={showPassword}
                                 onChange={(e) => setShowPassword(e.currentTarget.checked)}
                             />
-                            <Button type='submit' variant="outline-secondary mt-3" style={{ marginLeft: '140px' }}>Sign in</Button>
-                            {token ? null : (
-                                <Button variant="outline-secondary mt-3" style={{ marginLeft: '95px' }} onClick={login}>
-                                    Sign in with google
-                                </Button>
-                            )}
+                            <Row>
+                                <Col xs={12} md={12} lg={12} className="text-center">
+                                    <Button type='submit' variant="outline-secondary mt-3">Sign in</Button>
+                                    <br></br>
+                                    <a href='/Homepage/Register' style={{ cursor: 'pointer' }}>New user? register here</a>
+                                    {token ? null : (
+                                        <a onClick={login} style={{ cursor: 'pointer' }}> or Sign in with google </a>
+                                    )}
+                                </Col>
+                            </Row>
                         </Col>
                     </Row>
                 </Container>

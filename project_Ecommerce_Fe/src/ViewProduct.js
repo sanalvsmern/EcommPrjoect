@@ -32,24 +32,9 @@ function ViewProduct() {
 
   },[productId])
 
-  // const product = {
-  //   sellerId: "65b7755eacf7ec42c0617cb8",
-  //   productId: "casio",
-  //   productName: "casio watch",
-  //   categoryId: "watch",
-  //   description: "normal casio watch",
-  //   price: 300,
-  //   isAvailable: true,
-  //   productImage: "https://i.postimg.cc/L6TSbqNs/casio-Watch.jpg",
-  //   rating: "3",
-  //   review: "Nice",
-  //   vendorName: "casio manufacturer",
-  //   warranty: "2 years"
-  // };
-
   return (
     <div>
-      <Header buttonToggle={true}/>
+      <Header/>
       <Container className='viewProductClass'>
         {product ? (
           <Card style={{ width: '18rem' }}>

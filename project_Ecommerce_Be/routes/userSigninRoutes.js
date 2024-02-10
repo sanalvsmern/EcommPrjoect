@@ -25,7 +25,7 @@ router.post('/signin', async (req, res) => {
         }
 
         // Generate token with user type information
-        const token = jwt.sign({ userId: user._id, userType: user.userType }, secretKey, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user._id, firstName: user.firstName, userType: user.userType }, secretKey, { expiresIn: '1h' });
 
         //for userType 'user'
         if (user.userType === 'user') {
@@ -56,7 +56,7 @@ router.post('/googleReg', async (req, res) => {
             const hashedGoogleId = crypto.createHash('sha256').update(googleId).digest('hex');
             const user = new User({ email, hashedGoogleId, userType, firstName, lastName });
             await user.save();
-            const token = jwt.sign({ userId: user._id, userType: user.userType }, secretKey, { expiresIn: '1h' });
+            const token = jwt.sign({ userId: user._id,firstName: user.firstName, userType: user.userType }, secretKey, { expiresIn: '1h' });
             res.status(201).json({ message: 'Registration successful', token });
         } else {
             const hashedGoogleId = crypto.createHash('sha256').update(googleId).digest('hex');
@@ -64,7 +64,7 @@ router.post('/googleReg', async (req, res) => {
                 res.status(401).json({ message: 'Google authentication error' })
             }
             // Generate token with user type information
-            const token = jwt.sign({ userId: existingUser._id, userType: existingUser.userType }, secretKey, { expiresIn: '1h' });
+            const token = jwt.sign({ userId: existingUser._id, firstName: existingUser.firstName, userType: existingUser.userType }, secretKey, { expiresIn: '1h' });
             res.status(200).json({ message: 'Signin successful', token })
         }
     } catch (error) {

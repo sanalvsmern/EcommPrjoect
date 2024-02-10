@@ -11,7 +11,6 @@ import PaymentPage from './User/PaymentPage'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
 function App() {
 
   return (
@@ -19,7 +18,7 @@ function App() {
       <BrowserRouter>
         <ToastContainer />
         <Routes>
-          <Route path='/Homepage' element={<Homepage />}></Route>
+          <Route path='/Homepage/:categoryId' element={<Homepage />}></Route>
           <Route path='/Homepage/Signin' element={<Signin />}></Route>
           <Route path='Homepage/Register' element={<Register />}></Route>
           <Route path='/Seller/AddedItems' element={<AddedItems />}></Route>

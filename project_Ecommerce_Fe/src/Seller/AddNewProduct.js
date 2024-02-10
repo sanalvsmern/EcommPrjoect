@@ -7,6 +7,7 @@ import { jwtDecode } from 'jwt-decode';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios'
 import { toast } from 'react-toastify';
+import SubHeader from '../SubHeader'
 
 function AddNewProduct() {
 
@@ -121,7 +122,8 @@ function AddNewProduct() {
 
   return (
     <div>
-      <Header buttonToggle={true} />
+      <Header/>
+      <SubHeader></SubHeader>
       <Form onSubmit={handleAddProduct}>
         <Table striped bordered hover>
           <thead>

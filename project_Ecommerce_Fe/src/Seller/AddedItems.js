@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { jwtDecode } from 'jwt-decode';
 import { toast } from 'react-toastify';
+import SubHeader from '../SubHeader'
 
 
 function AddedItems() {
@@ -68,7 +69,8 @@ function AddedItems() {
 
   return (
     <div>
-      <Header buttonToggle={true} />
+      <Header/>
+      <SubHeader></SubHeader>
       <Table striped bordered hover>
         <thead>
           <tr>

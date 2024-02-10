@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Button, Table } from 'react-bootstrap'
 import Header from '../Header';
 import Footer from '../Footer';
+import SubHeader from '../SubHeader';
 
 function CheckoutPage() {
 
@@ -18,7 +19,8 @@ function CheckoutPage() {
 
     return (
         <div>
-            <Header buttonToggle={true}/>
+            <Header/>
+            <SubHeader></SubHeader>
             <Table striped bordered hover>
                 <thead>
                     <tr>

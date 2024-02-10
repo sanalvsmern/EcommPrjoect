@@ -15,10 +15,13 @@ import 'jquery-ui/ui/widgets/datepicker'; // Import datepicker module
 import 'jquery-ui/themes/base/all.css';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import SubHeader from './SubHeader';
 
 
 function Register() {
     const navigate = useNavigate()
+
+
     const handleClick1 = () => {
         navigate('/Homepage')
     }
@@ -118,21 +121,11 @@ function Register() {
 
     return (
         <div>
-            <Header buttonToggle={false} />
+            <Header/>
+            <SubHeader></SubHeader>
             <Form onSubmit={handleRegister}>
                 <Container>
                     <Row className="justify-content-end" >
-                        <Col xs={12} md={12} lg={12}>
-                            <Navbar>
-                                <Container>
-                                    <Nav className="me-auto">
-                                        <Nav.Link onClick={handleClick1}>Home</Nav.Link>
-                                        <Nav.Link onClick={handleClick2} style={{ fontWeight: 'bold' }}>Register</Nav.Link>
-                                        <Nav.Link onClick={handleClick3}>Sign in</Nav.Link>
-                                    </Nav>
-                                </Container>
-                            </Navbar>
-                        </Col>
                         <Col md={6} lg={8} className='Registerpage'></Col>
                         <Col xs={12} md={6} lg={4} className='style1'>
                             <h1 style={{ textAlign: 'center', fontSize: '30px', fontWeight: 'lighter', color: 'black' }}>Registration Form</h1>
@@ -193,11 +186,8 @@ function Register() {
                                 checked={userType === 'seller'}
                                 onChange={handleUser} />
                             <Row>
-                                <Col xs={12} md={6} lg={6}>
+                                <Col xs={12} md={12} lg={12}  className="text-center">
                                     <Button type='submit' variant="outline-secondary mt-2">Register</Button>
-                                </Col>
-                                <Col xs={12} md={6} lg={6}>
-                                    <p onClick={handleClick3}>Already a user? Click here to Signin</p>
                                 </Col>
                             </Row>
                         </Col>
