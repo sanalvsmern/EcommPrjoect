@@ -88,16 +88,6 @@ function Signin() {
 
     // Google authentication till here
 
-    const handleClick1 = () => {
-        navigate('/Homepage')
-    }
-    const handleClick2 = () => {
-        navigate('/Homepage/Register')
-    }
-    const handleClick3 = () => {
-        navigate('/Homepage/Signin')
-    }
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 

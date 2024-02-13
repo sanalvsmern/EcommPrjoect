@@ -18,8 +18,6 @@ function ViewProduct() {
   const token = sessionStorage.getItem('token')
   const decodedToken = token ? jwtDecode(token) : null
   const userId = decodedToken ? decodedToken.userId : null
-  const [qty, setQty] = useState(1);
-  const [selectedQty, setSelectedQty] = useState(0);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -42,12 +40,6 @@ function ViewProduct() {
 
   }, [productId])
 
-  // const handleAddToCart = ()=>{
-  //   // Save data to sessionStorage
-  //   sessionStorage.setItem('addedToCart', productId);
-  //   navigate('/User/CheckoutPage')
-  // }
-
   const handleAddToCart=() => {
     if (userId) {
       // Get existing cart cookie or create an empty one
@@ -57,13 +49,13 @@ function ViewProduct() {
       // Check if the product is already in the cart
       if (parsedCartCookie[productId]) {
         // Update existing product quantity
-        parsedCartCookie[productId].quantity += qty;
+        parsedCartCookie[productId].quantity += 1;
         Cookies.set(userId, JSON.stringify(parsedCartCookie))
-        console.log('Product added to existing cart entry');
+        toast.success('Product added to existing cart entry');
       } else {
         parsedCartCookie[productId] = {
           productDetails: product,
-          quantity: qty+selectedQty,
+          quantity: 1,
         }
         Cookies.set(userId, JSON.stringify(parsedCartCookie))
         toast.success('Added to cart successfully')
