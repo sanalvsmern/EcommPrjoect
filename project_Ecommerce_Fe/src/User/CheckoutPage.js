@@ -115,7 +115,7 @@ function CheckoutPage() {
                                 </td>
                                 <td className="text-center">
                                     <Button onClick={() => navigate(`/ViewProduct/${productId}`)} variant='secondary'>View</Button>
-                                    <Button variant='success'>Buy</Button>
+                                    <Button onClick={() => navigate(`/User/PaymentPage/${productId}`)} variant='success'>Buy</Button>
                                     <Button onClick={() => handleDelete(productId)} variant='danger'>Delete</Button>
                                 </td>
                                 <td>Will be updated</td>

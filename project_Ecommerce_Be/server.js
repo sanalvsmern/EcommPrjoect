@@ -7,7 +7,7 @@ const userRegistrationRoutes = require('./routes/userRegistrationRoutes');
 const userSigninRoutes = require('./routes/userSigninRoutes');
 const productsRoutes = require('./routes/productsRoutes');
 // const cartRouter = require('./routes/cartRouter');
-// const userDetails = require('./routes/userDetails');
+// const userDetails = require('./routes/userBuy');
 
 const app = express();
 app.use(cors());
@@ -25,7 +25,7 @@ app.use('/api/user', userRegistrationRoutes);
 app.use('/api/user', userSigninRoutes);
 app.use('/api/admin', productsRoutes);
 // app.use('/api/admin', cartRouter);
-// app.use('/api/user', userDetails);
+// app.use('/api/user', userBuy);
 
 app.listen(5000, () => {
     console.log('Server is running on port 5000');
