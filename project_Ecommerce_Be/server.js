@@ -2,12 +2,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const userRegistrationRoutes = require('./routes/userRegistrationRoutes');
 const userSigninRoutes = require('./routes/userSigninRoutes');
 const productsRoutes = require('./routes/productsRoutes');
 // const cartRouter = require('./routes/cartRouter');
-// const userDetails = require('./routes/userBuy');
+const userBuy = require('./routes/userBuy');
 
 const app = express();
 app.use(cors());
@@ -25,7 +28,7 @@ app.use('/api/user', userRegistrationRoutes);
 app.use('/api/user', userSigninRoutes);
 app.use('/api/admin', productsRoutes);
 // app.use('/api/admin', cartRouter);
-// app.use('/api/user', userBuy);
+app.use('/api/user', userBuy);
 
 app.listen(5000, () => {
     console.log('Server is running on port 5000');

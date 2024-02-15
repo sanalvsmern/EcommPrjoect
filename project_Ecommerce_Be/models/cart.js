@@ -1,15 +1,11 @@
 const mongoose = require('mongoose')
 
 const Cart = mongoose.model('Cart', {
-    userId: String,
+    productId: String,
     sellerId : String,
-    productId : String, 
-    productName : String,
-    price : Number,
-    productImage : String,
-    totalPrice: Number,
-    orderStatus: Boolean,
-    deliveryStatus: Boolean
+    userId: String,
+    quantity : Number,
+    orderStatus : String
 })
 
 module.exports = { Cart };
